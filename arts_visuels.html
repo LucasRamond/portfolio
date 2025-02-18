@@ -97,7 +97,7 @@
 
         @keyframes moveArrow {
             from {
-                transform: translateX(-20px);
+                transform: translateX(-50px);
             }
             to {
                 transform: translateX(20px);
@@ -130,8 +130,8 @@
 <body>
     <div id="pdf-container">
         <canvas id="pdf-canvas"></canvas>
-        <svg id="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M19 12H7" />
+        <svg id="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M20 12H7" />
         </svg>
         <div id="page-counter">1/1</div>
     </div>
@@ -308,22 +308,31 @@
     const arrow = document.getElementById('arrow');
     arrow.style.opacity = 0;  // Cache la flèche immédiatement
 }
-        function positionArrow() {
+function positionArrow() {
     const arrow = document.getElementById('arrow');
     const canvasRect = canvas.getBoundingClientRect();
     const isPortrait = window.matchMedia("(orientation: portrait)").matches;
     const arrowHeight = arrow.getBoundingClientRect().height;
-    const centerY = canvasRect.top + (canvasRect.height / 2) - (arrowHeight / 2);
+    const arrowWidth = arrow.getBoundingClientRect().width;
+    
+    // Calculer le centre horizontal du canvas
+ 
 
+    // Ajustement pour le mode portrait
     if (isPortrait) {
-        // En portrait, la flèche se positionne à droite du canvas
-        arrow.style.left = `${canvasRect.right}px`;
-        arrow.style.top = `${canvasRect.top + 200}px`; // Ajuster la position verticale
+        // En mode portrait, la flèche doit être un peu plus haut
+        const centerY = canvasRect.top + (canvasRect.height / 4) - (arrowHeight / 2);
+        const centerX = canvasRect.left + (canvasRect.width) - (arrowWidth / 2);
+        arrow.style.left = `${centerX}px`;
+        arrow.style.top = `${centerY}px`;  // Déplace un peu plus haut pour le mode portrait
     } else {
-        const offsetX = -220; // Ajuster cette valeur pour la position horizontale en mode paysage
-        arrow.style.left = `${canvasRect.right + offsetX}px`;
+        // En mode paysage, centrer horizontalement et verticalement
+        const centerY = canvasRect.top + (canvasRect.height / 2) - (arrowHeight / 2);
+        const centerX = canvasRect.left + (canvasRect.width / 2) - (arrowWidth / 2);
+        arrow.style.left = `${centerX}px`;
         arrow.style.top = `${centerY}px`;
     }
+
 
          }
 
