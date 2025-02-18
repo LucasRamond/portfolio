@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #191919;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #pdf-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 90vw; /* 100vw - 5% de chaque côté */
+            height: 90vh; /* 100vh - 5% de chaque côté */
+            position: relative;
+        }
+
+        canvas {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="pdf-container">
+        <canvas id="pdf-canvas"></canvas>
+    </div>
+
+    <script>
+        const url = "pdf/cveng.pdf"; // Remplace par le vrai nom du fichier
+        let pdfDoc = null,
+            pageNum = 1,
+            scale = 1, // Facteur de zoom initial
+            canvas = document.getElementById('pdf-canvas'),
+            ctx = canvas.getContext('2d');
+
+        // Charger et afficher le PDF
+        function renderPage(num) {
+            pdfDoc.getPage(num).then(page => {
+                let viewport = page.getViewport({ scale: scale * window.devicePixelRatio }); // Adapte la résolution
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+
+                let renderContext = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+                page.render(renderContext);
+            });
+        }
+
+        function zoomIn() {
+            scale += 0.5;
+            renderPage(pageNum);
+        }
+
+        function zoomOut() {
+            if (scale > 0.5) {
+                scale -= 0.5;
+                renderPage(pageNum);
+            }
+        }
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
+
+        pdfjsLib.getDocument(url).promise.then(pdfDoc_ => {
+            pdfDoc = pdfDoc_;
+            renderPage(pageNum);
+        });
+    </script>
+
+</body>
+</html>
