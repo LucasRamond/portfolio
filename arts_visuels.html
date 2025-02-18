@@ -120,7 +120,7 @@
 
 @media (orientation: portrait) {
     #page-counter {
-        bottom: -1%; /* En portrait, on le décale un peu plus */
+        bottom: -3%; /* En portrait, on le décale un peu plus */
         left: 50%;
     }
 
@@ -240,15 +240,15 @@
 
             if (Math.abs(deltaX) > Math.abs(deltaY)) {
                 if (deltaX > 50) {
-                    changePage(1); // Aller à la page suivante
+                    changePage(-1); // Aller à la page suivante
                 } else if (deltaX < -50) {
-                    changePage(-1); // Aller à la page précédente
+                    changePage(1); // Aller à la page précédente
                 }
             } else {
                 if (deltaY > 50) {
-                    changePage(-1); // Aller à la page précédente
+                    changePage(1); // Aller à la page précédente
                 } else if (deltaY < -50) {
-                    changePage(1); // Aller à la page suivante
+                    changePage(-1); // Aller à la page suivante
                 }
             }
         });
