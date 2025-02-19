@@ -1,67 +1,362 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lucas Ramond, designer - concepteur</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <title>PDF Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <style>
-        /* Style général */
         body {
-            background: #191919;
-            color: white;
-            font-family: 'Raleway', sans-serif;
             margin: 0;
-            padding: 20px;
-            text-align: left;
+            overflow: hidden;
+            background: #191919;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
         }
 
-        h1 {
-            font-size: 2em;
-            margin-bottom: 20px;
+        #pdf-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 90vw; /* 100vw - 5% de chaque côté */
+            height: 90vh; /* 100vh - 5% de chaque côté */
+            position: relative;
         }
 
-        /* Liste des liens */
-        ul {
-            list-style-type: none;
-            padding: 0;
-            margin-left: 2%;
+        canvas {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
         }
 
-        ul li {
-            margin: 10px 0;
+        #pdf-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90vw; /* 100vw - 5% de chaque côté */
+    height: 90vh; /* 100vh - 5% de chaque côté */
+    position: relative;
+
+    
+}
+
+@media (orientation: portrait) {
+    #pdf-container {
+        transform: rotate(-90deg);
+        transform-origin: center;
+        width: 100vh;  /* Utilisation de la hauteur de l'écran pour la largeur */
+        height: 100vw; /* Utilisation de la largeur de l'écran pour la hauteur */
+        margin: 0 auto;  /* Centrage du PDF horizontalement */
+        position: absolute;
+        top: 50%;  /* Centrage vertical */
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-90deg); /* Centrage complet */
+        box-sizing: border-box;
+        padding-left: 12%;  /* Ajoute une marge de 10% en haut */
+        padding-bottom: 3%;  /* Ajoute une marge de 3% en bas */
+        padding-right: 12%;  /* Ajoute une marge de 3% en bas */
+    }
+}
+
+@media (orientation: landscape) {
+    #pdf-container {
+        width: 92vw; /* 90% de la largeur de l'écran pour le mode paysage */
+        height: 92vh; /* 90% de la hauteur de l'écran pour le mode paysage */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* Centrage du contenu */
+        box-sizing: border-box;
+        padding-bottom: 2%;  /* Ajoute une marge de 3% en bas */
+        padding-top: 2%;  /* Ajoute une marge de 3% en bas */
+ 
+    }
+
+    canvas {
+        max-width: 100%;  /* Empêche l'extension du canvas hors de l'écran */
+        max-height: 100%; /* Empêche l'extension du canvas hors de l'écran */
+    }
+}
+        /* Nouvelle icône en haut à gauche du PDF */
+        #arrow {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    stroke: #191919;
+    animation: moveArrow 1.5s infinite alternate ease-in-out;
+    z-index: 10; /* Assure que l'icône est bien au-dessus */
+}
+
+        @keyframes moveArrow {
+            from {
+                transform: translateX(-50px);
+            }
+            to {
+                transform: translateX(20px);
+            }
         }
 
-        a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.2em;
-        }
+        
+        #page-counter {
+    position: absolute;
+    bottom: 50%; /* Positionne le compteur en bas en mode paysage */
+    right: -7%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 12px; 
+    font-family: 'Archivo', sans-serif;
+    font-weight: light;
+    padding: 0.5vh 1vw;
+    border-radius: 5px;
+    transition: opacity 1s ease-in-out;
+}
 
-        /* Changer la couleur au survol */
-        a:hover {
-            color: #ff4b33; /* Changer la couleur du texte en rouge au survol */
-            text-decoration: underline;
-        }
+@media (orientation: portrait) {
+    #page-counter {
+        bottom: 2%; /* En portrait, on le décale un peu plus */
+        right: 50%;
+    }
 
-        /* Supprimer les encadrés bleus par défaut */
-        a:focus {
-            outline: none;
-        }
+}
     </style>
 </head>
 <body>
-    <h1></h1>
-    <ul>
-        <li><a href="cv.html">Lucas-Ramond_CV_fr.pdf</a></li>
-        <li><a href="cv_english.html">Lucas-Ramond_CV_eng.pdf</a></li>
-        <li><a href="objet_espace.html">Lucas-Ramond_portfolio_objet_espace_fr.pdf</a></li>
-        <li><a href="object_space.html">Lucas-Ramond_portfolio_object_space_eng.pdf</a></li>
-        <li><a href="arts_visuels.html">Lucas-Ramond_portfolio_arts visuel_fr.pdf</a></li>
-        <li><a href="visual_arts.html">Lucas-Ramond_portfolio_visual arts_eng.pdf</a></li>
-        <li><a href="numerique.html">Lucas-Ramond_portfolio_numérique_fr.pdf</a></li>
-        <li><a href="digital.html">Lucas-Ramond_portfolio_digital_en.pdf</a></li>
-    </ul>
+    <div id="pdf-container">
+        <canvas id="pdf-canvas"></canvas>
+        <svg id="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M20 12H7" />
+        </svg>
+        <div id="page-counter">1/1</div>
+    </div>
+    
+
+    <script>
+        const url = "pdf/art.pdf";
+        let pdfDoc = null;
+        let canvas = document.getElementById('pdf-canvas');
+        let ctx = canvas.getContext('2d');
+        let resizeTimeout = null;
+        let currentPage = 1;
+        let isScrolling = false;
+        let arrowVisible = false;
+        let pageCounter = document.getElementById('page-counter');
+
+        function renderPage() {
+    if (!pdfDoc) return;
+
+    setTimeout(() => {
+        pdfDoc.getPage(currentPage).then(page => {
+            let viewport = page.getViewport({ scale: 1 });
+
+            let isPortrait = window.matchMedia("(orientation: portrait)").matches;
+            let availableWidth = window.innerWidth;  // Utilise la largeur complète de l'écran
+            let availableHeight = window.innerHeight;  // Utilise la hauteur complète de l'écran
+
+            let scale = isPortrait 
+                ? Math.min(availableWidth / viewport.height, availableHeight / viewport.width) 
+                : Math.min(availableWidth / viewport.width, availableHeight / viewport.height);
+
+            viewport = page.getViewport({ scale: scale * window.devicePixelRatio });
+
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            let renderContext = {
+                canvasContext: ctx,
+                viewport: viewport
+            };
+
+            page.render(renderContext);
+
+            // Mettre à jour le compteur de page après le rendu
+            setTimeout(() => {
+                updatePageCounter();
+            }, 500); // 500ms de délai pour permettre au rendu de se faire
+        });
+    }, 200);
+}
+        function handleResize() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                renderPage();
+                positionArrow(); // Met à jour la position de la flèche
+            }, 500);
+        }
+
+        function changePage(delta) {
+    let newPage = currentPage + delta;
+    if (newPage >= 1 && newPage <= pdfDoc.numPages) {
+        currentPage = newPage;
+        console.log('Page actuelle :', currentPage);
+        renderPage();
+        updatePageCounter();  // Mise à jour immédiate
+        hideArrow();  
+    }
+}
+
+
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
+                changePage(-1); // Changer direction ici
+            } else if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
+                changePage(1); // Changer direction ici
+            }
+        });
+
+        document.addEventListener('wheel', (event) => {
+            if (isScrolling) return;
+            isScrolling = true;
+            setTimeout(() => isScrolling = false, 1000);
+
+            if (event.deltaY > 0) {
+                changePage(1);
+            } else if (event.deltaY < 0) {
+                changePage(-1);
+            }
+        });
+
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        document.addEventListener('touchstart', (event) => {
+            touchStartX = event.touches[0].clientX;
+            touchStartY = event.touches[0].clientY;
+        });
+
+        document.addEventListener('touchend', (event) => {
+            let touchEndX = event.changedTouches[0].clientX;
+            let touchEndY = event.changedTouches[0].clientY;
+            let deltaX = touchEndX - touchStartX;
+            let deltaY = touchEndY - touchStartY;
+
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                if (deltaX > 50) {
+                    changePage(-1); // Aller à la page suivante
+                } else if (deltaX < -50) {
+                    changePage(1); // Aller à la page précédente
+                }
+            } else {
+                if (deltaY > 50) {
+                    changePage(1); // Aller à la page précédente
+                } else if (deltaY < -50) {
+                    changePage(-1); // Aller à la page suivante
+                }
+            }
+        });
+
+        document.addEventListener('click', (event) => {
+            let clickX = event.clientX;
+            let clickY = event.clientY;
+            let screenWidth = window.innerWidth;
+            let screenHeight = window.innerHeight;
+
+            let isPortrait = window.matchMedia("(orientation: portrait)").matches;
+            let quarterScreenHeight = screenHeight / 4;
+
+            if (isPortrait) {
+                // Clic sur le quart haut ou bas de l'écran en portrait
+                if (clickY < quarterScreenHeight) {
+                    changePage(1); // Aller à la page suivante
+                } else if (clickY > screenHeight - quarterScreenHeight) {
+                    changePage(-1); // Aller à la page précédente
+                }
+            } else {
+                // Clic sur le quart gauche ou droit en paysage
+                let quarterScreen = screenWidth / 4;
+                if (clickX < quarterScreen) {
+                    changePage(-1); // Aller à la page suivante
+                } else if (clickX > screenWidth - quarterScreen) {
+                    changePage(1); // Aller à la page précédente
+                }
+            }
+        });
+        pdfjsLib.getDocument(url).promise.then(pdf => {
+    pdfDoc = pdf;
+    console.log('Document chargé:', pdfDoc);
+    renderPage();
+    updatePageCounter(); // Met à jour le compteur dès le chargement du PDF
+    showArrow();
+});
+        
+
+
+        function showArrow() {
+            const arrow = document.getElementById('arrow');
+            arrow.style.stroke = '#ff4b33'; // Icône en bleu
+            // Affiche la flèche 1 seconde après le chargement du PDF
+            setTimeout(() => {
+                arrow.style.opacity = 1;
+                positionArrow(); // Positionne la flèche
+            }, 1000);
+
+            // La flèche disparaît après 3 secondes en fondu
+            setTimeout(() => {
+                arrow.style.opacity = 0;
+            }, 4000); // 1 seconde de délai + 3 secondes d'affichage = 4 secondes au total
+        }
+
+        function hideArrow() {
+    const arrow = document.getElementById('arrow');
+    arrow.style.opacity = 0;  // Cache la flèche immédiatement
+}
+function positionArrow() {
+    const arrow = document.getElementById('arrow');
+    const canvasRect = canvas.getBoundingClientRect();
+    const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+    const arrowHeight = arrow.getBoundingClientRect().height;
+    const arrowWidth = arrow.getBoundingClientRect().width;
+    
+    // Calculer le centre horizontal du canvas
+ 
+
+    // Ajustement pour le mode portrait
+    if (isPortrait) {
+        // En mode portrait, la flèche doit être un peu plus haut
+        const centerY = canvasRect.top + (canvasRect.height / 4) - (arrowHeight / 2);
+        const centerX = canvasRect.left + (canvasRect.width) - (arrowWidth / 2);
+        arrow.style.left = `${centerX}px`;
+        arrow.style.top = `${centerY}px`;  // Déplace un peu plus haut pour le mode portrait
+    } else {
+        // En mode paysage, centrer horizontalement et verticalement
+        const centerY = canvasRect.top + (canvasRect.height / 2) - (arrowHeight / 2);
+        const centerX = canvasRect.left + (canvasRect.width / 2) - (arrowWidth / 2);
+        arrow.style.left = `${centerX}px`;
+        arrow.style.top = `${centerY}px`;
+    }
+
+
+         }
+
+    
+
+
+        function updatePageCounter() {
+    if (pdfDoc && pageCounter) {
+        console.log(`Mise à jour du compteur de pages : ${currentPage} / ${pdfDoc.numPages}`);
+        pageCounter.textContent = `${currentPage} / ${pdfDoc.numPages}`;
+        pageCounter.style.opacity = 1; // Affiche le compteur
+
+        // Disparition après 1 seconde
+        setTimeout(() => {
+            pageCounter.style.opacity = 0;
+        }, 1000);
+    } else {
+        console.log('Erreur : pdfDoc ou pageCounter indisponible');
+    }
+}
+
+    
+        window.addEventListener('resize', handleResize);
+    </script>
 </body>
 </html>
